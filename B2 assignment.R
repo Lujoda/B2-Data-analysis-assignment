@@ -7,3 +7,10 @@
 # Perform an nMDS analysis on the total community and produce graph (hint: use the vegan package)
 
 # Perform an RDA analysis on the total community and produce graph (hint: use the vegan package)
+
+
+## Packages
+pacman::p_load(here, tidyverse, ggplot2, car, GGally, emmeans)
+
+## Read data
+data = read.csv(here("data/ETX3_B2_multivariate_data2023.csv"))
