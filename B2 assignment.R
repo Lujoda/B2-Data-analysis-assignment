@@ -247,12 +247,20 @@ summary(back_lm_int)
 
 #### NMDS ####
 
+  # Calculating NMDS using "Bray-Curtis-dissimilarity" as a distance metric
 nmds = metaMDS(comm = data[,1:20],
                distance = "bray",
                try = 100)
 
-nmds_scores = as.data.frame(scores(nmds))
-
+  # Plotting the NMDS graph
 plot(nmds)
-orditorp(nmds,display="species",col="red",air=0.01, cex = 0.8)
-orditorp(nmds,display="sites",cex=1.25,air=0.01)
+orditorp(nmds,display="species",col="red",air=0.01, cex = 0.8) # indicating species points in graph 
+orditorp(nmds,display="sites",cex=1.25,air=0.01) # indicating site points in graph
+
+  ## A multitude of information may be gathered from the NMDS graph. Some of the insights might be:
+  ## 1.) site 27 and 2 are very different
+  ## 2.) Sites 13, 5, 14, 11, 9 and 17 cluster together and seem to be rather similar
+  ## 3.) Species 8 and species 3 seem to be the most similar species
+  ## 4.) Species 2 and species 13 are the most different
+
+
