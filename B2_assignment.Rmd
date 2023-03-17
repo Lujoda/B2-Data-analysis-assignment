@@ -1,8 +1,24 @@
 ---
-title: "B2 assignment"
-author: "Luic Damian"
+title: "B2 assignment - multivariate analysis - group 16"
+author: 
+- "Anastasia Manjavidze"
+- "Luic Damian"
 date: "15/03/2023"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+linestretch: 1.2
+mainfont: Times New Roman
+sansfont: Times New Roman
+fontsize: 12pt
+link-citations: true
+documentclass: article
+geometry: margin=1in
+always_allow_html: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -27,6 +43,7 @@ env = data[21:25]
 
 ```
 
+
 # Data exploration
 
 ## Basic statistics and information 
@@ -36,16 +53,25 @@ env = data[21:25]
 dim(data)   
 
 ```
-The data set has 30 objects and 25 variables
-
+<span style ="color:blue">
+The data set has 30 objects and 25 variables  
+</span>
+  
+  
+  
+    
+    
 ### Structure
 
 ```{r}
 str(data) 
 ```
-
-Species abundance data consists of integers, environmental variables are numeric, i.e. continuous
-
+<span style ="color:blue">
+**Species abundance data consists of integers, environmental variables are numeric, i.e. continuous**  
+</span>
+  
+  
+  
 ### Summary
 
 ```{r}
@@ -53,11 +79,13 @@ summary(data)
 
 ```
 
-The summary shows the minumum, 1st quartile, median, mean, 3rd quartile and max values of each variable
+<span style ="color:blue">
+**The summary shows the minumum, 1st quartile, median, mean, 3rd quartile and max values of each variable**  
+</span>
 
 
 
-## Distribution and collinearity of predictors 
+## Distribution and correlation of predictors 
 
 ```{r}
 do_env = ggpairs(data, columns = c(21:25), lower = list(continuous = wrap("smooth", alpha = 0.3, size = 0.7)))+
@@ -65,26 +93,28 @@ do_env = ggpairs(data, columns = c(21:25), lower = list(continuous = wrap("smoot
 do_env
     
 ```
-   
-All environmental variables are more or less normally distributed and slightly correlated to each other. It should be
-checked whether multicollinearity is present or not.
 
+<span style ="color:blue">
+**All environmental variables are more or less normally distributed and slightly correlated to each other. It should be**
+**checked whether multicollinearity is present or not.**
+</span>
     
 ## Collinearity
-
-Checking for collinearity with variance inflation parameter (VIF)
+<span style ="color:blue">
+**Checking for collinearity with variance inflation parameter (VIF)**
+</span>
 
 ```{r}
 vif(lm(spp1 ~ env1 + env2 + env3 + env4 + env5, data = data))
 ```
-
-All VIF for predictors are far below 5, hence there is no problematic collinearity
-
+<span style ="color:blue">
+**All VIF for predictors are far below 5, hence there is no problematic collinearity**
+</span>
 
 ## Linearity between predictors (environmental variables) and dependent variables (species)
-
- Because of readablility only 5 species and the 5 environmental parameters are plotted in one graph 
- 
+<span style ="color:blue">
+**Because of readablility only 5 species and the 5 environmental parameters are plotted in one graph**
+</span> 
 ```{r data overview pariwise plots} 
 do_sp1_sp5_env = ggpairs(data, columns = c(1:5,21:25), lower = list(continuous = wrap("smooth", alpha = 0.3, size = 0.7)))+
   theme_classic()
@@ -104,10 +134,12 @@ do_sp16_sp20_env
 
 ```
 
+<span style ="color:blue">
 
 There are several significant linear relationships between species abundances and environmental variables. A linerar model to predict abundances from environental parameters may therefore be useful.
 
 Species abundances are often normally distributed but some are skewed, mostly to the right.
+</span>
 
 
 ## Correlation plot heatmap
@@ -117,17 +149,21 @@ corrplot(cor(data), method = "color", type = "lower",  tl.col = "black", tl.srt 
 
 ```
 
+<span style ="color:blue">
 In this heatmap all correlations between species abundances and environmental parameters can be seen at one glance.
 Correlations of varying degree are present between species abundances and environmental variables
+</span>
 
 
 ## Distribution of species 16 (relevant species for linear models)
 ```{r}
 hist(data$spp16, breaks = 15, xlim = c(0,50), xlab = "Abundance of species 16", main = "Distribution of abundance of species 16 per measuring site")
 ```
+<span style ="color:blue">
 
 Approximately normally distributed
 
+</span>
 
 ```{r}
 do_sp16_env = ggpairs(data, columns = c(16,21:25), lower = list(continuous = wrap("smooth", alpha = 0.3, size = 0.7)))+
@@ -135,18 +171,23 @@ do_sp16_env = ggpairs(data, columns = c(16,21:25), lower = list(continuous = wra
 do_sp16_env
 ```
 
+<span style ="color:blue">
 
 There are correlations between abundance of species 16 and the environmental parameters, the correlation between 
 spp16 and env4 being significant
 
+</span>
 
 
 # Linear models using stepwise model selection
 
 ## Intercept and full model
 
+<span style ="color:blue">
+
 To apply stepwise model selection, the intercept model (model without any environmental predictor) and the
 full model (model with all environmental parameters as predictors) must be specified
+</span>
 
 ```{r}
 intercept_model = lm(spp16 ~ 1, data = data)
@@ -189,15 +230,19 @@ both_lm$coefficients
 
 Resulting model: $$spp16 = -0.327*env4 + 77$$
 
+<span style ="color:blue">
 
 *All stepwise model selection methods without interactions resulted in the same model*
 *using only the predictor env4 to predict abundance of species 16*
+
+</span>
 
 ### Model diagnosis
 ```{r}
 plot(for_lm)
 ```
 
+<span style ="color:blue">
 
 Assumptions are fulfilled:   
 - residuals are homogeneous (Homoscedasticity)
@@ -207,19 +252,26 @@ Assumptions are fulfilled:
 - Linearity has been checked in line 96
 - Multicollinearity has been excluded in line 54
 
+</span>
+
 ```{r}
 summary(for_lm)
 
 ```
 
+<span style ="color:blue">
 
 The relationship between env4 and spp16 is highly significant (p < 8*10^-5)
 But only about 43 % of variance are explained by the model.
 
+</span>
 
 ## Models with interaction terms
 
+<span style ="color:blue">
+
 This time the full model includes interactions
+</span>
 
 ```{r}
 intercept_model = lm(spp16 ~ 1, data = data)
@@ -229,20 +281,24 @@ full_model_int = lm(spp16 ~ env1 * env2 * env3 * env4 * env5, data = data)
 summary(full_model_int)
 ```
 
+<span style ="color:blue">
 
 
 With all interactions included in the full model, there are more predictors than observations.
 This is impossible to calculate.
 To demonstrate the inclusion of interaction terms nevertheless, the parameter env5 is simply removed
 from the model.
+</span>
 
 ```{r}
 full_model_int = lm(spp16 ~ env1 * env2 * env3 * env4, data = data)
 summary(full_model_int)
 
 ```
+<span style ="color:blue">
 
 Now stepwise model selection can be done:
+</span>
 
 ### Forward stepwise model selection (with interaction) 
 ```{r}
@@ -263,9 +319,11 @@ back_lm_int = step(full_model_int, scope=formula(full_model_int), directions = "
 back_lm_int$coefficients
 ```
 
+<span style ="color:blue">
 
-Resulting model contains the predictors *env1, env2, env3, env4, env2:env3, env1:env4, env2:env4,* 
-*env3:env4 and env2:env3:env4*
+Resulting model contains the predictors **env1, env2, env3, env4, env2:env3, env1:env4, env2:env4,** 
+**env3:env4 and env2:env3:env4**
+</span>
 
 ### Both ways stepwise model selection (with interaction) 
 
@@ -279,10 +337,12 @@ both_lm_int$coefficients
 Resulting model: $$spp16 = -0.327*env4 + 77.552$$
 (only env4 as predictor), same model as forward stepwise selection
 
+<span style ="color:blue">
 
 Forward and both directions stepwise selection resulted in a sparce model containing only env4 as a predictor
 Backward stepwise selection included env1, env2, env3, env4, env2:env3, env1:env4, env2:env4, 
 env3:env4 and env2:env3:env4
+</span>
 
 ### Diagnosis and interpretation ####
 
@@ -294,6 +354,7 @@ plot(for_lm_int)
 
 ```
 
+<span style ="color:blue">
 Assumptions for forward and both direction stepwise selection models are fulfilled:   
 - residuals are homogeneous (Homoscedasticity)
 - Normal distribution of error
@@ -301,6 +362,7 @@ Assumptions for forward and both direction stepwise selection models are fulfill
 - Observations should be independent, but  data source is unknown
 - Linearity has been checked in line 96
 - Multicollinearity has been excluded in line 54
+</span>
 
 #### Backward model selection
 
@@ -309,6 +371,7 @@ plot(back_lm_int)
 
 ```
 
+<span style ="color:blue">
 Assumptions for backward stepwise selection model are not completely fulfilled: 
 - residuals are only more or less homogeneous (Homoscedasticity)
 - Error is normally distributed although not as clearly as the previous models
@@ -318,22 +381,29 @@ Assumptions for backward stepwise selection model are not completely fulfilled:
 - Multicollinearity is present due to interaction terms (see below) 
 
 Checking for multilinearity in the linear model with interaction terms:
+</span>
 
 ```{r}
 vif(lm(spp1 ~ env1 * env2 * env3 * env4, data = data))
 ```
+<span style ="color:blue">
 Very high VIFs -> multicollinearity
+</span>
 
 ```{r}
 vif(lm(spp1 ~ env1 + env2 + env3 + env4, data = data)) # Low VIFs in the model without interactions
 
 ```
+<span style ="color:blue">
 Low VIFs in the model without interactions
+</span>
 
 ```{r}
 vif(lm(spp1 ~ env1:env2 + env2:env3 + env1:env4 + env2:env4 + env3:env4 + env1:env2:env3 +env1:env2:env4 + env1:env3:env4 + env2:env3:env4 + env1:env2:env3:env4, data = data))
 ```
+<span style ="color:blue">
 High VIFs in model with only interactions
+</span>
 
 
 #### Interpretation forward and both directions model
@@ -342,10 +412,12 @@ High VIFs in model with only interactions
 summary(for_lm_int)
 
 ```
+<span style ="color:blue">
 
 The relationship between env4 and spp16 is highly significant (p < 8*10^-5)
 But only about 43 % of variance are explained by the model (or 41 % when considering adjusted R^2)
 
+</span>
 
 #### Interpretation backward stepwise selection model
 ```{r}
@@ -353,6 +425,7 @@ summary(back_lm_int)
 
 ```
 
+<span style ="color:blue">
 
 There is a significant relationship between model predictors and abundance of species 16 (p = 0.022 < 0.05)
 R^2 is higher than the sparse model including only env4, however adjusted R^2 is lower due to the number 
@@ -360,11 +433,14 @@ of predictors. The relationship is also less significant.
 Overall the sparse model including only env4 (and no interactions) would be preferred as it explains a
 considerable degree of variance using only one predictor and very low p-value
 
+</span>
 
 
 # Nonmetric multidimensional scaling (NMDS) 
 
+<span style ="color:blue">
 Calculating NMDS using "Bray-Curtis-dissimilarity" as a distance metric
+</span>
 
 ```{r, echo = FALSE}
 nmds = metaMDS(comm = data[,1:20],
@@ -373,14 +449,17 @@ nmds = metaMDS(comm = data[,1:20],
 
 ```
 
+<span style ="color:blue">
 
 Plotting the NMDS graph
+</span>
 
 ```{r}
 plot(nmds)
 orditorp(nmds,display="species",col="red",air=0.01, cex = 0.8) # indicating species points in graph 
 orditorp(nmds,display="sites",cex=1.25,air=0.01) # indicating site points in graph
 ```
+<span style ="color:blue">
 
 A multitude of information may be gathered from the NMDS graph. Some of the insights might be:
 1.) site 27 and 2 are very different
@@ -389,3 +468,4 @@ A multitude of information may be gathered from the NMDS graph. Some of the insi
 4.) Species 2 and species 13 are the most different
 
 
+</span>
